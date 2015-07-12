@@ -1,0 +1,266 @@
+diff --git a/sites/all/modules/mailchimp/mailchimp.module b/sites/all/modules/mailchimp/mailchimp.module
+index a9cbc9e..b2a0bac 100644
+--- a/sites/all/modules/mailchimp/mailchimp.module
++++ b/sites/all/modules/mailchimp/mailchimp.module
+@@ -44,7 +44,7 @@
+ 
+   $items['admin/config/services/mailchimp'] = array(
+     'title' => 'MailChimp',
+-    'description' => 'Manage MailChimp Settings.',
++    'description' => t('Manage MailChimp Settings.'),
+     'page callback' => 'drupal_get_form',
+     'page arguments' => array('mailchimp_admin_settings'),
+     'access arguments' => array('administer mailchimp'),
+@@ -52,7 +52,7 @@
+     'type' => MENU_NORMAL_ITEM,
+   );
+   $items['admin/config/services/mailchimp/global'] = array(
+-    'title' => 'Global Settings',
++    'title' => t('Global Settings'),
+     'type' => MENU_DEFAULT_LOCAL_TASK,
+     'weight' => -10,
+   );
+@@ -126,7 +126,7 @@
+ 
+   $api_key = variable_get('mailchimp_api_key', '');
+   if (!strlen($api_key)) {
+-    watchdog('mailchimp', 'Mailchimp Error: API Key cannot be blank.', array(), WATCHDOG_ERROR);
++    watchdog('mailchimp', t('Mailchimp Error: API Key cannot be blank.'), array(), WATCHDOG_ERROR);
+     return NULL;
+   }
+   // Set the timeout to something that won't take down the Drupal site:
+@@ -948,7 +948,7 @@
+     $result = $mcapi->lists->webhookAdd($list_id, $url, $actions, $sources);
+   }
+   catch (Exception $e) {
+-    watchdog('mailchimp', 'An error occurred adding webhook for list @list. "%message"', array(
++    watchdog('mailchimp', t('An error occurred adding webhook for list @list. "%message"'), array(
+       '@list' => $list_id,
+       '%message' => $e->getMessage(),
+     ), WATCHDOG_ERROR);
+
+sites/all/modules/mailchimp/modules/mailchimp_activity/mailchimp_activity.install
+diff --git a/sites/all/modules/mailchimp/modules/mailchimp_activity/mailchimp_activity.install b/sites/all/modules/mailchimp/modules/mailchimp_activity/mailchimp_activity.install
+index d7c22f9..1b368ea 100644
+--- a/sites/all/modules/mailchimp/modules/mailchimp_activity/mailchimp_activity.install
++++ b/sites/all/modules/mailchimp/modules/mailchimp_activity/mailchimp_activity.install
+@@ -11,48 +11,48 @@
+ function mailchimp_activity_schema() {
+ 
+   $schema['mailchimp_activity_entity'] = array(
+-    'description' => 'MailChimp activity enabled entities.',
++    'description' => t('MailChimp activity enabled entities.'),
+     'fields' => array(
+       'mailchimp_activity_entity_id' => array(
+         'type' => 'serial',
+         'not null' => TRUE,
+-        'description' => 'Primary Key: Unique mailchimp_activity_entity entity ID.',
++        'description' => t('Primary Key: Unique mailchimp_activity_entity entity ID.'),
+       ),
+       'name' => array(
+-        'description' => 'The machine-readable name of this mailchimp_activity_entity.',
++        'description' => t('The machine-readable name of this mailchimp_activity_entity.'),
+         'type' => 'varchar',
+         'length' => 128,
+         'not null' => TRUE,
+       ),
+       'label' => array(
+-        'description' => 'The human-readable name of this mailchimp_activity_entity.',
++        'description' => t('The human-readable name of this mailchimp_activity_entity.'),
+         'type' => 'varchar',
+         'length' => 128,
+         'not null' => TRUE,
+       ),
+       'entity_type' => array(
+-        'description' => 'The Drupal entity type (e.g. "node", "user").',
++        'description' => t('The Drupal entity type (e.g. "node", "user").'),
+         'type' => 'varchar',
+         'length' => 128,
+         'not null' => TRUE,
+         'default' => '',
+       ),
+       'bundle' => array(
+-        'description' => 'The Drupal bundle (e.g. "page", "user")',
++        'description' => t('The Drupal bundle (e.g. "page", "user")'),
+         'type' => 'varchar',
+         'length' => 128,
+         'not null' => TRUE,
+         'default' => '',
+       ),
+       'entity_path' => array(
+-        'description' => 'The path to view individual entities of the selected type.',
++        'description' => t('The path to view individual entities of the selected type.'),
+         'type' => 'varchar',
+         'length' => 128,
+         'not null' => TRUE,
+         'default' => '',
+       ),
+       'email_property' => array(
+-        'description' => 'The property that contains the email address to track',
++        'description' => t('The property that contains the email address to track'),
+         'type' => 'varchar',
+         'length' => 128,
+         'not null' => TRUE,
+@@ -63,11 +63,11 @@
+         'not null' => TRUE,
+         'default' => 0,
+         'size' => 'tiny',
+-        'description' => 'Whether or not this mailchimp activity stream is enabled.',
++        'description' => t('Whether or not this mailchimp activity stream is enabled.'),
+       ),
+       // The following fields are for supporting exportable status.
+       'locked' => array(
+-        'description' => 'A boolean indicating whether the administrator may delete this mapping.',
++        'description' => t('A boolean indicating whether the administrator may delete this mapping.'),
+         'type' => 'int',
+         'not null' => TRUE,
+         'default' => 0,
+@@ -80,10 +80,10 @@
+         // not safe to use it at this point.
+         'default' => 0x01,
+         'size' => 'tiny',
+-        'description' => 'The exportable status of the entity.',
++        'description' => t('The exportable status of the entity.'),
+       ),
+       'module' => array(
+-        'description' => 'The name of the providing module if the entity has been defined in code.',
++        'description' => t('The name of the providing module if the entity has been defined in code.'),
+         'type' => 'varchar',
+         'length' => 255,
+         'not null' => FALSE,
+
+sites/all/modules/mailchimp/modules/mailchimp_campaign/includes/mailchimp_campaign.admin.inc
+diff --git a/sites/all/modules/mailchimp/modules/mailchimp_campaign/includes/mailchimp_campaign.admin.inc b/sites/all/modules/mailchimp/modules/mailchimp_campaign/includes/mailchimp_campaign.admin.inc
+index 39275f8..c418ff9 100644
+--- a/sites/all/modules/mailchimp/modules/mailchimp_campaign/includes/mailchimp_campaign.admin.inc
++++ b/sites/all/modules/mailchimp/modules/mailchimp_campaign/includes/mailchimp_campaign.admin.inc
+@@ -421,7 +421,7 @@
+ 
+   $form['merge_vars']['content'] = array(
+     '#type' => 'item',
+-    '#title' => 'MailChimp merge variables',
++    '#title' => t('MailChimp merge variables'),
+     '#markup' => _mailchimp_campaign_build_merge_vars_html($merge_vars),
+     '#description' => t(
+       'Insert merge variables from the %list_name list or one of the !standard_link.',
+@@ -523,7 +523,7 @@
+  */
+ function _mailchimp_campaign_build_entity_option_list($entity_info) {
+   $options = array(
+-    '' => '-- Select --',
++    '' => t('-- Select --'),
+   );
+   foreach ($entity_info as $entity_id => $entity_data) {
+     // Exclude MailChimp entities.
+
+sites/all/modules/mailchimp/modules/mailchimp_lists/includes/mailchimp_lists.admin.inc
+diff --git a/sites/all/modules/mailchimp/modules/mailchimp_lists/includes/mailchimp_lists.admin.inc b/sites/all/modules/mailchimp/modules/mailchimp_lists/includes/mailchimp_lists.admin.inc
+index 7571922..785f3f5 100644
+--- a/sites/all/modules/mailchimp/modules/mailchimp_lists/includes/mailchimp_lists.admin.inc
++++ b/sites/all/modules/mailchimp/modules/mailchimp_lists/includes/mailchimp_lists.admin.inc
+@@ -25,10 +25,10 @@
+     }
+     if ($enabled) {
+       // This is a webhook for this Mailchimp Module.
+-      $webhook_status = "ENABLED (" . l(t('disable'), 'admin/config/services/mailchimp/lists/' . $mc_list['id'] . '/webhook/disable') . ')';
++      $webhook_status = t('ENABLED') . '(' . l(t('disable'), 'admin/config/services/mailchimp/lists/' . $mc_list['id'] . '/webhook/disable') . ')';
+     }
+     else {
+-      $webhook_status = "disabled (" . l(t('enable'), 'admin/config/services/mailchimp/lists/' . $mc_list['id'] . '/webhook/enable') . ')';
++      $webhook_status = t('disabled') . ' (' . l(t('enable'), 'admin/config/services/mailchimp/lists/' . $mc_list['id'] . '/webhook/enable') . ')';
+     }
+     $rows[] = array(
+       l($mc_list['name'], 'https://admin.mailchimp.com/lists/dashboard/overview?id=' . $mc_list['web_id']),
+@@ -54,7 +54,7 @@
+       array('!link' => l(t('MailChimp'), 'https://admin.mailchimp.com/lists/'))), 'warning');
+   }
+   else {
+-    $options = 'Currently Available MailChimp lists:<i>';
++    $options = t('Currently Available MailChimp lists').':<i>';
+     foreach ($mc_lists as $mc_list) {
+       $options .= ' ' . $mc_list['name'] . ',';
+     }
+@@ -126,11 +126,11 @@
+       default:
+         return array();
+     }
+-    $label = $action . " webhooks";
++    $label = t($action) . " webhooks";
+     return confirm_form($form,
+       t('Are you sure you want to &action webhooks for %name?',
+         array(
+-          '&action' => $action,
++          '&action' => t($action),
+           '%name' => $list['name'],
+         )),
+       'admin/config/services/mailchimp/lists',
+
+sites/all/modules/mailchimp/modules/mailchimp_lists/includes/mailchimp_lists.field.inc
+diff --git a/sites/all/modules/mailchimp/modules/mailchimp_lists/includes/mailchimp_lists.field.inc b/sites/all/modules/mailchimp/modules/mailchimp_lists/includes/mailchimp_lists.field.inc
+index 958f5e2..92ccff0 100644
+--- a/sites/all/modules/mailchimp/modules/mailchimp_lists/includes/mailchimp_lists.field.inc
++++ b/sites/all/modules/mailchimp/modules/mailchimp_lists/includes/mailchimp_lists.field.inc
+@@ -98,15 +98,15 @@
+   );
+   $form['double_opt_in'] = array(
+     '#type' => 'checkbox',
+-    '#title' => 'Require subscribers to Double Opt-in',
+-    '#description' => 'New subscribers will be sent a link with an email they must follow to confirm their subscription.',
++    '#title' => t('Require subscribers to Double Opt-in'),
++    '#description' => t('New subscribers will be sent a link with an email they must follow to confirm their subscription.'),
+     '#default_value' => isset($this_field['settings']['double_opt_in']) ? $this_field['settings']['double_opt_in'] : FALSE,
+     '#disabled' => $disabled,
+   );
+   $form['send_welcome'] = array(
+     '#type' => 'checkbox',
+-    '#title' => 'Send a welcome email to new subscribers',
+-    '#description' => 'New subscribers will be sent a welcome email once they are confirmed.',
++    '#title' => t('Send a welcome email to new subscribers'),
++    '#description' => t('New subscribers will be sent a welcome email once they are confirmed.'),
+     '#default_value' => isset($this_field['settings']['send_welcome']) ? $this_field['settings']['send_welcome'] : FALSE,
+     '#disabled' => $disabled,
+   );
+@@ -121,13 +121,13 @@
+   $form = array();
+   $mc_list_id = $field['settings']['mc_list_id'];
+   $form['show_interest_groups'] = array(
+-    '#title' => "Enable Interest Groups",
+-    '#type' => "checkbox",
++    '#title' => t('Enable Interest Groups'),
++    '#type' => 'checkbox',
+     '#default_value' => $instance['settings']['show_interest_groups'],
+   );
+   $form['interest_groups_title'] = array(
+-    '#title' => "Interest Groups Label",
+-    '#type' => "textfield",
++    '#title' => t('Interest Groups Label'),
++    '#type' => 'textfield',
+     '#default_value' => isset($instance['settings']['interest_groups_title']) ? $instance['settings']['interest_groups_title'] : "Interest Groups",
+   );
+ 
+@@ -146,8 +146,8 @@
+   );
+ 
+   $form['unsubscribe_on_delete'] = array(
+-    '#title' => "Unsubscribe on deletion",
+-    '#type' => "checkbox",
++    '#title' => t('Unsubscribe on deletion'),
++    '#type' => 'checkbox',
+     '#description' => t('Unsubscribe entities from this list when they are deleted.'),
+     '#default_value' => $instance['settings']['unsubscribe_on_delete'],
+   );
+
+sites/all/modules/mailchimp/modules/mailchimp_lists/mailchimp_lists.module
+diff --git a/sites/all/modules/mailchimp/modules/mailchimp_lists/mailchimp_lists.module b/sites/all/modules/mailchimp/modules/mailchimp_lists/mailchimp_lists.module
+index 23d7151..fb8570f 100644
+--- a/sites/all/modules/mailchimp/modules/mailchimp_lists/mailchimp_lists.module
++++ b/sites/all/modules/mailchimp/modules/mailchimp_lists/mailchimp_lists.module
+@@ -170,7 +170,7 @@
+   // Add the title and description to lists for anonymous users or if requested:
+   $form[$wrapper_key]['subscribe'] = array(
+     '#type' => 'checkbox',
+-    '#title' => 'Subscribe',
++    '#title' => t('Subscribe'),
+     '#disabled' => $instance['required'],
+     '#required' => $instance['required'],
+     '#default_value' => $instance['required'] || $is_subscribed,

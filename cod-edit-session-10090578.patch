@@ -1,0 +1,12 @@
+diff --git a/cod_session/cod_session.cod.user_permission.inc b/cod_session/cod_session.cod.user_permission.inc
+index 485e31a..82e88fc 100644
+--- a/cod_session/cod_session.cod.user_permission.inc
++++ b/cod_session/cod_session.cod.user_permission.inc
+@@ -93,6 +93,7 @@ function cod_session_user_initial_permissions() {
+     'roles' => array(
+       'administrator' => 'administrator',
+       'content editor' => 'content editor',
++      'authenticated user' => 'authenticated user',
+       'session organizer' => 'session organizer',
+     ),
+     'module' => 'node',

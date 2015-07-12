@@ -1,0 +1,263 @@
+diff --git a/cod_schedule/cod_schedule.features.field_base.inc b/cod_schedule/cod_schedule.features.field_base.inc
+index 2974ae2..d1f0d33 100644
+--- a/cod_schedule/cod_schedule.features.field_base.inc
++++ b/cod_schedule/cod_schedule.features.field_base.inc
+@@ -20,7 +20,6 @@ function cod_schedule_field_default_field_bases() {
+     'field_permissions' => array(
+       'type' => 0,
+     ),
+-    'foreign keys' => array(),
+     'indexes' => array(
+       'revision_id' => array(
+         0 => 'revision_id',
+@@ -46,7 +45,6 @@ function cod_schedule_field_default_field_bases() {
+     'field_permissions' => array(
+       'type' => 0,
+     ),
+-    'foreign keys' => array(),
+     'indexes' => array(),
+     'locked' => 0,
+     'module' => 'date',
+@@ -61,9 +59,9 @@ function cod_schedule_field_default_field_bases() {
+         'second' => 0,
+         'year' => 'year',
+       ),
+-      'timezone_db' => 'UTC',
++      'timezone_db' => '',
+       'todate' => 'required',
+-      'tz_handling' => 'date',
++      'tz_handling' => 'none',
+     ),
+     'translatable' => 0,
+     'type' => 'datetime',
+@@ -79,14 +77,6 @@ function cod_schedule_field_default_field_bases() {
+     'field_permissions' => array(
+       'type' => 2,
+     ),
+-    'foreign keys' => array(
+-      'field_collection_item' => array(
+-        'columns' => array(
+-          'target_id' => 'item_id',
+-        ),
+-        'table' => 'field_collection_item',
+-      ),
+-    ),
+     'indexes' => array(
+       'target_id' => array(
+         0 => 'target_id',
+@@ -124,7 +114,6 @@ function cod_schedule_field_default_field_bases() {
+     'field_permissions' => array(
+       'type' => 0,
+     ),
+-    'foreign keys' => array(),
+     'indexes' => array(
+       'value' => array(
+         0 => 'value',
+@@ -154,14 +143,6 @@ function cod_schedule_field_default_field_bases() {
+     'field_permissions' => array(
+       'type' => 0,
+     ),
+-    'foreign keys' => array(
+-      'cod_event_room' => array(
+-        'columns' => array(
+-          'target_id' => 'evtrid',
+-        ),
+-        'table' => 'cod_event_room',
+-      ),
+-    ),
+     'indexes' => array(
+       'target_id' => array(
+         0 => 'target_id',
+@@ -198,14 +179,6 @@ function cod_schedule_field_default_field_bases() {
+     'field_permissions' => array(
+       'type' => 0,
+     ),
+-    'foreign keys' => array(
+-      'cod_event_time' => array(
+-        'columns' => array(
+-          'target_id' => 'evttid',
+-        ),
+-        'table' => 'cod_event_time',
+-      ),
+-    ),
+     'indexes' => array(
+       'target_id' => array(
+         0 => 'target_id',
+diff --git a/cod_schedule/cod_schedule.features.field_instance.inc b/cod_schedule/cod_schedule.features.field_instance.inc
+index 1d6b6b1..b13e379 100644
+--- a/cod_schedule/cod_schedule.features.field_instance.inc
++++ b/cod_schedule/cod_schedule.features.field_instance.inc
+@@ -34,11 +34,24 @@ function cod_schedule_field_default_field_instances() {
+     'required' => 1,
+     'settings' => array(
+       'behaviors' => array(
++        'og_widget' => array(
++          'access_override' => 0,
++          'admin' => array(
++            'widget_type' => 'entityreference_autocomplete',
++          ),
++          'default' => array(
++            'widget_type' => 'options_select',
++          ),
++          'status' => TRUE,
++        ),
+         'prepopulate' => array(
+-          'action' => 'hide',
++          'action' => 'none',
+           'action_on_edit' => 0,
+           'fallback' => 'none',
+-          'og_context' => 0,
++          'providers' => array(
++            'og_context' => 0,
++            'url' => 1,
++          ),
+           'skip_perm' => 0,
+           'status' => 1,
+         ),
+@@ -47,9 +60,9 @@ function cod_schedule_field_default_field_instances() {
+     ),
+     'widget' => array(
+       'active' => 0,
+-      'module' => 'options',
++      'module' => 'og',
+       'settings' => array(),
+-      'type' => 'options_select',
++      'type' => 'og_complex',
+       'weight' => 8,
+     ),
+   );
+@@ -61,7 +74,7 @@ function cod_schedule_field_default_field_instances() {
+     'description' => '',
+     'display' => array(
+       'default' => array(
+-        'label' => 'hidden',
++        'label' => 'inline',
+         'module' => 'date',
+         'settings' => array(
+           'format_type' => 'cod_time',
+@@ -69,7 +82,7 @@ function cod_schedule_field_default_field_instances() {
+           'multiple_from' => '',
+           'multiple_number' => '',
+           'multiple_to' => '',
+-          'show_remaining_days' => FALSE,
++          'show_remaining_days' => 0,
+         ),
+         'type' => 'date_default',
+         'weight' => 0,
+@@ -112,9 +125,12 @@ function cod_schedule_field_default_field_instances() {
+     'description' => '',
+     'display' => array(
+       'default' => array(
+-        'label' => 'above',
+-        'settings' => array(),
+-        'type' => 'hidden',
++        'label' => 'inline',
++        'module' => 'entityreference',
++        'settings' => array(
++          'link' => FALSE,
++        ),
++        'type' => 'entityreference_label',
+         'weight' => 1,
+       ),
+     ),
+@@ -144,7 +160,8 @@ function cod_schedule_field_default_field_instances() {
+     ),
+   );
+ 
+-  // Exported field_instance: 'field_collection_item-field_event_timeslots-field_timeslot_allowed_types'
++  // Exported field_instance:
++  // 'field_collection_item-field_event_timeslots-field_timeslot_allowed_types'
+   $field_instances['field_collection_item-field_event_timeslots-field_timeslot_allowed_types'] = array(
+     'bundle' => 'field_event_timeslots',
+     'default_value' => NULL,
+@@ -174,7 +191,8 @@ function cod_schedule_field_default_field_instances() {
+     ),
+   );
+ 
+-  // Exported field_instance: 'field_collection_item-field_event_timeslots-field_timeslot_room'
++  // Exported field_instance:
++  // 'field_collection_item-field_event_timeslots-field_timeslot_room'
+   $field_instances['field_collection_item-field_event_timeslots-field_timeslot_room'] = array(
+     'bundle' => 'field_event_timeslots',
+     'default_value' => NULL,
+@@ -217,7 +235,8 @@ function cod_schedule_field_default_field_instances() {
+     ),
+   );
+ 
+-  // Exported field_instance: 'field_collection_item-field_event_timeslots-field_timeslot_time'
++  // Exported field_instance:
++  // 'field_collection_item-field_event_timeslots-field_timeslot_time'
+   $field_instances['field_collection_item-field_event_timeslots-field_timeslot_time'] = array(
+     'bundle' => 'field_event_timeslots',
+     'default_value' => NULL,
+@@ -298,7 +317,7 @@ function cod_schedule_field_default_field_instances() {
+       'module' => 'field_collection',
+       'settings' => array(),
+       'type' => 'field_collection_embed',
+-      'weight' => 5,
++      'weight' => 6,
+     ),
+   );
+ 
+diff --git a/cod_schedule/cod_schedule.module b/cod_schedule/cod_schedule.module
+index bcb7021..1fc0917 100644
+--- a/cod_schedule/cod_schedule.module
++++ b/cod_schedule/cod_schedule.module
+@@ -76,18 +76,7 @@ function cod_schedule_menu() {
+     'weight' => -10,
+   );
+ 
+-  /*
+-  $items['admin/conference/%node/schedule'] = array(
+-    'title' => 'Schedule',
+-    'type' => MENU_LOCAL_TASK,
+-    'page callback' => 'cod_schedule_schedule_admin_page',
+-    'page arguments' => array(3),
+-    'access callback' => 'node_access',
+-    'access arguments' => array('update', 3),
+-    'weight' => 0,
+-    'file' => 'includes/schedule.admin.inc',
+-  );
+-  */
++
+   $items['admin/conference/%node/schedule/room'] = array(
+     'title' => 'Add Room',
+     'type' => MENU_LOCAL_ACTION,
+@@ -99,13 +88,12 @@ function cod_schedule_menu() {
+    );
+ 
+   $items['admin/conference/%node/schedule/time'] = array(
+-    'title' => 'Add Time',
++    'title' => t('Add Time'),
+     'type' => MENU_LOCAL_ACTION,
+-    'page callback' => 'drupal_get_form',
+-    'page arguments' => array('cod_event_time_form', new CodEventTime(), 'add', 2),
++    'page callback' => 'cod_schedule_add_time',
++    'page arguments' => array(2),
+     'access callback' => 'entity_access',
+     'access arguments' => array('create', 'cod_event_time'),
+-    'file' => 'includes/schedule.admin.inc',
+   );
+ 
+   // NoJS/AJAX callbacks that can use the default Schedule AJAX form system.
+@@ -133,6 +121,20 @@ function cod_schedule_menu() {
+ }
+ 
+ /**
++ * Callback to send a user to the add time page and prepopulate the current
++ * conference.
++ */
++function cod_schedule_add_time($event) {
++  $options = array(
++    'query' => array(
++      'og_group_ref' => $event->nid,
++    ),
++  );
++
++  drupal_goto('admin/conference/config/times/add/', $options);
++}
++
++/**
+  * Implements hook_permission().
+  */
+ function cod_schedule_permission() {

@@ -1,0 +1,38 @@
+diff --git a/cod_session/cod_session.cod.og_permission.inc b/cod_session/cod_session.cod.og_permission.inc
+new file mode 100644
+index 0000000..7659e32
+--- /dev/null
++++ b/cod_session/cod_session.cod.og_permission.inc
+@@ -0,0 +1,32 @@
++<?php
++/**
++ * @file
++ * cod_events.features.og_features_permission.inc
++ */
++
++/**
++ * Implements hook_og_initial_permissions().
++ */
++function cod_events_og_initial_permissions() {
++  $permissions = array();
++
++  // Default per event: create own session permission
++  $permissions['create session content'] = array(
++    'roles' => array(
++      'administrator member' => 'administrator member',
++      'member' => 'member',
++      'non-member' => 'non-member',
++    ),
++  );
++
++  // Default per event: edit own session permission
++  $permissions['edit own session content'] = array(
++    'roles' => array(
++      'administrator member' => 'administrator member',
++      'member' => 'member',
++      'non-member' => 'non-member',
++    ),
++  );
++
++  return $permissions;
++}
